@@ -1,7 +1,7 @@
 <?php
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-    use App\Http\Controllers\{AuthController,CategoryController};
+    use App\Http\Controllers\{AuthController,CategoryController,ProductController};
 
 
 
@@ -18,6 +18,6 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function(){
     Route::post('add-category',[CategoryController::class,'addCategory']);
     Route::post('update-category/{id}',[CategoryController::class,'updateCategory']);
     Route::delete('delete-category',[CategoryController::class,'deleteCategory']);
- 
+
 
  }) ;    

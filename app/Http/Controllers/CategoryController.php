@@ -18,8 +18,8 @@ class CategoryController extends Controller
             $imagePath  = $request->file('image')->store('category_image','public');
             
             $data = Category::create([
-            'name'=>$request->name,
-            'image'=>$imagePath
+                'name'=>$request->name,
+                'image'=>$imagePath
             ]);
 
             return response([
@@ -27,7 +27,7 @@ class CategoryController extends Controller
                 'message'=>"Category inserted succesfully",
                 'data'=>$data
             ]);
-     }
+    }
 
 
 
@@ -53,7 +53,7 @@ class CategoryController extends Controller
             if($category->image && Storage::disk('public')->exist($category->image)){
                Storage::disk('public')->delete($category->image);
             }
-
+            
             $imagePath = $request->file('image')->store('category_image','public');
 
             $category->image = $imagePath;
@@ -73,35 +73,30 @@ class CategoryController extends Controller
 
 
 
-    public function deleteCategory($id){
+    public function deleteCategory($id)
+   {
+    try {
+        $category = Category::findOrFail($id);
 
-        $category = Category::find($id);
-
-        if (!$category) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Category not found'
-            ], 404);
-        }
-
-
-        // // delete image from story
-        if($category->image() && Storage::disk('public')->exist($category->image)){
-
+        // Image storage se hatao
+        if ($category->image) {
             Storage::disk('public')->delete($category->image);
-
         }
 
         $category->delete();
 
-
         return response()->json([
-            'status' => true,
-            'message' => 'Category deleted successfully'
+            'status'  => true,
+            'message' => 'Category deleted successfully',
         ]);
 
+    } catch (Exception $e) {
+        return response()->json([
+            'status'  => false,
+            'message' => $e->getMessage()
+        ], 500);
     }
-
+}
 
 
 
